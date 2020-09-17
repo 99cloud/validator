@@ -13,31 +13,32 @@ import (
 )
 
 const (
-	defaultTagName        = "validate"
-	utf8HexComma          = "0x2C"
-	utf8Pipe              = "0x7C"
-	tagSeparator          = ","
-	orSeparator           = "|"
-	tagKeySeparator       = "="
-	structOnlyTag         = "structonly"
-	noStructLevelTag      = "nostructlevel"
-	omitempty             = "omitempty"
-	isdefault             = "isdefault"
-	requiredWithoutAllTag = "required_without_all"
-	requiredWithoutTag    = "required_without"
-	requiredWithTag       = "required_with"
-	requiredWithAllTag    = "required_with_all"
-	skipValidationTag     = "-"
-	diveTag               = "dive"
-	keysTag               = "keys"
-	endKeysTag            = "endkeys"
-	requiredTag           = "required"
-	namespaceSeparator    = "."
-	leftBracket           = "["
-	rightBracket          = "]"
-	restrictedTagChars    = ".[],|=+()`~!@#$%^&*\\\"/?<>{}"
-	restrictedAliasErr    = "Alias '%s' either contains restricted characters or is the same as a restricted tag needed for normal operation"
-	restrictedTagErr      = "Tag '%s' either contains restricted characters or is the same as a restricted tag needed for normal operation"
+	defaultTagName         = "validate"
+	utf8HexComma           = "0x2C"
+	utf8Pipe               = "0x7C"
+	tagSeparator           = ","
+	orSeparator            = "|"
+	tagKeySeparator        = "="
+	structOnlyTag          = "structonly"
+	noStructLevelTag       = "nostructlevel"
+	omitempty              = "omitempty"
+	isdefault              = "isdefault"
+	requiredWithoutAllTag  = "required_without_all"
+	requiredWithoutTag     = "required_without"
+	requiredWithTag        = "required_with"
+	requiredWithAllTag     = "required_with_all"
+	requiredWithEnabledTag = "required_with_enabled"
+	skipValidationTag      = "-"
+	diveTag                = "dive"
+	keysTag                = "keys"
+	endKeysTag             = "endkeys"
+	requiredTag            = "required"
+	namespaceSeparator     = "."
+	leftBracket            = "["
+	rightBracket           = "]"
+	restrictedTagChars     = ".[],|=+()`~!@#$%^&*\\\"/?<>{}"
+	restrictedAliasErr     = "Alias '%s' either contains restricted characters or is the same as a restricted tag needed for normal operation"
+	restrictedTagErr       = "Tag '%s' either contains restricted characters or is the same as a restricted tag needed for normal operation"
 )
 
 var (
@@ -107,7 +108,7 @@ func New() *Validate {
 
 		switch k {
 		// these require that even if the value is nil that the validation should run, omitempty still overrides this behaviour
-		case requiredWithTag, requiredWithAllTag, requiredWithoutTag, requiredWithoutAllTag:
+		case requiredWithTag, requiredWithAllTag, requiredWithoutTag, requiredWithoutAllTag, requiredWithEnabledTag:
 			_ = v.registerValidation(k, wrapFunc(val), true, true)
 		default:
 			// no need to error check here, baked in will always be valid

@@ -20,6 +20,7 @@ const (
 	typeOr
 	typeKeys
 	typeEndKeys
+	typeRequiredWithEnabled
 )
 
 const (
@@ -259,6 +260,11 @@ func (v *Validate) parseFieldTagsRecursive(tag string, fieldName string, alias s
 			if t == isdefault {
 				current.typeof = typeIsDefault
 			}
+
+			if strings.Contains(t, requiredWithEnabledTag) {
+				current.typeof = typeRequiredWithEnabled
+			}
+
 			// if a pipe character is needed within the param you must use the utf8Pipe representation "0x7C"
 			orVals := strings.Split(t, orSeparator)
 

@@ -170,6 +170,40 @@ func (v *validate) traverseField(ctx context.Context, parent reflect.Value, curr
 
 				if ct.typeof == typeStructOnly {
 					goto CONTINUE
+				} else if ct.typeof == typeRequiredWithEnabled {
+					// set Field Level fields
+					v.slflParent = parent
+					v.flField = current
+					v.cf = cf
+					v.ct = ct
+
+					if !ct.fn(ctx, v) {
+						v.str1 = string(append(ns, cf.altName...))
+
+						if v.v.hasTagNameFunc {
+							v.str2 = string(append(structNs, cf.name...))
+						} else {
+							v.str2 = v.str1
+						}
+
+						v.errs = append(v.errs,
+							&fieldError{
+								v:              v.v,
+								tag:            ct.aliasTag,
+								actualTag:      ct.tag,
+								ns:             v.str1,
+								structNs:       v.str2,
+								fieldLen:       uint8(len(cf.altName)),
+								structfieldLen: uint8(len(cf.name)),
+								value:          current.Interface(),
+								param:          ct.param,
+								kind:           kind,
+								typ:            typ,
+							},
+						)
+						return
+					}
+					return
 				} else if ct.typeof == typeIsDefault {
 					// set Field Level fields
 					v.slflParent = parent

@@ -1,4 +1,4 @@
-module github.com/go-playground/validator/v10
+module github.com/99cloud/validator/v10
 
 go 1.13
 
